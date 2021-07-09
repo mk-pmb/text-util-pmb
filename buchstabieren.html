@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html><head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>Buchstabieren</title>
+  <style type="text/css">
+    var { display: none; }
+    p label { display: inline; }
+  </style>
+</head><body>
+
+<form action="ignore://" method="get" onsubmit="return buchstabiere();">
+  <p>Wort: <input type="text" name="word" size="60" value=""
+    onkeyup="buchstabiere();" onchange="buchstabiere();"></p>
+  <p><input type="submit" value="Buchstabiert:"> <span id="rslt"></span></p>
+  <p>Sprache:
+    <label><input type="radio" name="lang" value="de"
+      checked="checked">Deutsch
+    <var src="wp-de:Buchstabiertafel" date="2006-05-23, 11:43 CEST">
+      A=Anton Ä=Ärger B=Berta C=Cäsar Ch=Charlotte D=Dora E=Emil F=Friedrich
+      G=Gustav H=Heinrich I=Ida J=Julius K=Kaufmann L=Ludwig M=Martha
+      N=Nordpol O=Otto Ö=Ökonom P=Paula Q=Quelle R=Richard S=Samuel
+      Sch=Schule ß=Eszett T=Theodor U=Ulrich Ü=Übermut V=Viktor W=Wilhelm
+      X=Xanthippe Y=Ypsilon Z=Zacharias
+    </var></label>
+    <label><input type="radio" name="lang" value="ch">Schweizerisch
+    <var src="wp-de:Buchstabiertafel" date="2006-05-23, 11:43 CEST">
+      A=Anna Ä=Äsch B=Berta C=Cäsar D=Daniel E=Emil F=Friedrich G=Gustav
+      H=Heinrich I=Ida J=Jakob K=Kaiser L=Leopold M=Marie N=Niklaus O=Otto
+      Ö=Örlikon P=Peter Q=Quasi R=Rosa S=Sophie T=Theodor U=Ulrich Ü=Übermut
+      V=Viktor W=Wilhelm X=Xaver Y=Yverdon Z=Zürich
+    </var></label>
+    <label><input type="radio" name="lang" value="au">Österreichisch
+    <var src="wp-de:Buchstabiertafel" date="2006-05-23, 11:43 CEST">
+      A=Anton Ä=Ärger B=Berta C=Cäsar Ch=Christine D=Dora E=Emil F=Friedrich
+      G=Gustav H=Heinrich I=Ida J=Julius K=Konrad L=Ludwig M=Martha
+      N=Nordpol O=Otto Ö=Österreich P=Paula Q=Quelle R=Richard S=Siegfried
+      Sch=Schule ß=scharfes_S T=Theodor U=Ulrich Ü=Übel V=Viktor W=Wilhelm
+      X=Xaver Y=Ypsilon Z=Zürich
+    </var></label>
+  </p>
+</form>
+
+
+<script type="text/javascript">
+/*jslint indent: 2, maxlen: 80, continue: true, browser: true */
+function buchstabiere() {
+  'use strict';
+  var rslt, elem;
+  elem = document.getElementById('rslt');
+  elem.innerHTML = '';
+  try {
+    rslt = (function () {
+      var lang, txt = String(document.forms[0].elements.word.value);
+      lang = document.querySelector('input[type=radio]:checked'
+        ).parentNode.querySelector('var');
+      if (!lang.chars) {
+        lang.chars = Object.create(null);
+        lang.innerHTML.replace(/^|$|\n/g, ' ').replace(/\S=(\S+)/g,
+          function (bst, voc) { lang.chars[bst.substr(0, 1)] = voc; });
+      }
+      lang = lang.chars;
+      txt = txt.replace(/\S/g, function (ch) {
+        var upper = ch.toUpperCase(), word = (lang[ch] || lang[upper]);
+        if (!word) { return ('?' + ch + ' '); }
+        if (ch === upper) { return (word.toUpperCase() + ' '); }
+        return (word.substr(0, 1).toLowerCase() +
+          word.substr(1, word.length) + ' ');
+      });
+      return txt;
+    }());
+    elem.className = 'success';
+  } catch (err) {
+    rslt = '!! Fehler: ' + String(err);
+    elem.className = 'error';
+  }
+  elem.appendChild(document.createTextNode(rslt));
+  return false;
+}
+</script>
+
+</body></html>
