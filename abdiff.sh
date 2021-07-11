@@ -5,7 +5,13 @@
 function abdiffuse () {
   cd /
   local SIDES=( "$(mk_tmp a)" "$(mk_tmp b)" )
-  ( diffuse "${SIDES[@]}"; rm -- "${SIDES[@]}" ) &
+  local VDIFF="$(
+    which \
+      diffuse \
+      meld \
+      2>/dev/null | grep -m 1 -Pe '^/'
+    )"
+  ( "$VDIFF" "${SIDES[@]}"; rm -- "${SIDES[@]}" ) &
   disown $!
   return 0
 }
