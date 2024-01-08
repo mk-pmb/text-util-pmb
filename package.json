@@ -1,5 +1,5 @@
 { "name": "text-util-pmb",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Misc text utilities",
   "keywords": [],
 
@@ -15,6 +15,14 @@
   "contributors": [],
 
   "private": true, "license": "ISC",
+
+  "scripts": { "postinstall": "node -r libdir-binlinks-cfg-linker-pmb -e 0" },
+
+  "dependencies": {
+    "libdir-binlinks-cfg-linker-pmb": "^0.1.5"
+  },
+  "devDependencies": {},
+
 
   "engines": { "bash": ">=4.0.0" }
 }
