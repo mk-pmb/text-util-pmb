@@ -29,7 +29,7 @@ function metased () {
         --optvar=RUNMODE --avail=runmodes --dashes=
       [ "${RUNMODE//-/}" == help ] && return 0
       echo "E: $0: unsupported runmode: $RUNMODE" >&2; return 1;;
-    * ) SCRIPT_FN="$RUNMODE"; RUNMODE=;;
+    * ) set -- "$SCRIPT_FN" "$@"; SCRIPT_FN="$RUNMODE"; RUNMODE=;;
   esac
   sed -"$SED_FLAGS" <(metased__transform "$SCRIPT_FN") "$@"
   return $?
